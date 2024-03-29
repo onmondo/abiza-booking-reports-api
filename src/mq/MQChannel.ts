@@ -1,5 +1,5 @@
 import amqp, { Channel, Connection } from "amqplib";
-import { envKeys } from "../../util/config"
+import { envKeys } from "../util/config"
 
 export default class MQChannel {
     static getInstace() {

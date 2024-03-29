@@ -2,7 +2,7 @@ require('dotenv').config();
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import { envKeys } from "../util/config"
+import { envKeys } from "./util/config";
 import Server from './mq/Server';
 import PersitBookingCommand from './commands/PersistBookingCommand';
 import PersistYearlyBooking from './services/PersistYearlyBooking';
