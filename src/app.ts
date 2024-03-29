@@ -4,7 +4,8 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { envKeys } from "../util/config"
 import Server from './mq/Server';
-import PersistBookingVisitor from './services/PersistBookingVisitor';
+import PersitBookingCommand from './commands/PersistBookingCommand';
+import PersistYearlyBooking from './services/PersistYearlyBooking';
 
 // database connection to mongodb thru mongoose
 const {
@@ -27,7 +28,8 @@ app.get('/', (req: Request, res: Response) => {
     })
 });
 
-Server.consumeMessage("rpc_queue")
+Server.consumeMessage("rpc_queue", new PersitBookingCommand(new PersistYearlyBooking()))
+// Server.receiver("getYearlyBookings")
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     const err = new Error(`Cannot find ${req.originalUrl} on this server!`);

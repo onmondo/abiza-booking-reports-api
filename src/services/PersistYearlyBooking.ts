@@ -2,8 +2,8 @@ import { isEmpty } from "lodash";
 import YearlyBooking from "../models/YearlyBooking";
 import { TYearlyBooking } from "../types/BookingTypes"
 
-export default class PersistYearlyBooking  {
-    async visitGuest(bookingDetails: any): Promise<void> {
+export default class PersistYearlyBooking {
+    async persist(bookingDetails: any): Promise<void> {
         // const bookingDetails = guest.getBookingDetails();
         const { year, month, bookingId } = bookingDetails;
 
