@@ -1,18 +1,16 @@
 import amqp, { Channel, Connection } from "amqplib";
 import { envKeys } from "../util/config"
 
+type MQInstance = { connection: Connection, channel: Channel }
+
 export default class MQChannel {
-    static getInstace() {
-        throw new Error("Method not implemented.");
-    }
-
     private static instance: MQChannel;
-    private channel: unknown;
-    private connection: unknown;
+    private channel: Channel;
+    private connection: Connection;
 
-    private constructor() {
-        this.channel = undefined;
-        this.connection = undefined;
+    private constructor({connection, channel}: MQInstance) {
+        this.connection = connection;
+        this.channel = channel;
     }
 
     public getChannel(): Channel {
@@ -28,19 +26,16 @@ export default class MQChannel {
         connection.close();
     }
 
-    private async createChannel(): Promise<void> {
-        const {
-            RABBIT_MQ_URL
-        } = envKeys();
-        const connection: Connection = await amqp.connect(RABBIT_MQ_URL);
-        this.connection = connection;
-        this.channel = await connection.createChannel();
-    }
-
     public static async getInstance(): Promise<MQChannel> {
-        console.log("Creating new rabitmq instance...")
-        MQChannel.instance = new MQChannel()
-        await MQChannel.instance.createChannel()
+        if (!MQChannel.instance) {
+            console.log("Creating new rabitmq instance...")
+            const {
+                RABBIT_MQ_URL
+            } = envKeys();
+            const connection: Connection = await amqp.connect(RABBIT_MQ_URL || 'amqp://guest:password@localhost');
+            const channel = await connection.createChannel();
+            MQChannel.instance = new MQChannel({ connection, channel })
+        }
         
         return MQChannel.instance;
     }
