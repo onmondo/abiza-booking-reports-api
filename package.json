@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --poll src/app.ts",
+    "dev:debug": "NODE_OPTIONS=\"--inspect=0.0.0.0:9231\" ts-node-dev --poll src/app.ts",
     "build": "rimraf ./dist && tsc",
     "start:local": "npm run build && node dist/app.js",
+    "start:debug": "npm run build && node --inspect=localhost:9231 dist/app.js",
     "start": "npm run build && pm2 start dist/app.js --watch"
   },
   "keywords": [
